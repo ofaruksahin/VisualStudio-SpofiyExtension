@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="VSIXSpotify.AddIn.UI.SpotifyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             Name="SpotifyAddIn">
+    <Grid>
+        <TabControl 
+            x:Name="tabControl"
+            Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+            >
+            <TabItem 
+                x:Name="authorizationTabItem"
+                Header="LogIn">
+                <WebBrowser x:Name="authorizationBrowser"/>
+            </TabItem>
+
+            <TabItem 
+                x:Name="deviceTabItem"
+                Header="Devices"></TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

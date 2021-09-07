@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>DionysosFX\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="DionysosFX.Host">
+      <HintPath>DionysosFX\DionysosFX.Host.dll</HintPath>
+    </Reference>
+    <Reference Include="DionysosFX.Module.IWebApi">
+      <HintPath>DionysosFX\DionysosFX.Module.IWebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="DionysosFX.Module.WebApi">
+      <HintPath>DionysosFX\DionysosFX.Module.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="DionysosFX.Module.WebApi.JSON">
+      <HintPath>DionysosFX\DionysosFX.Module.WebApi.JSON.dll</HintPath>
+    </Reference>
+    <Reference Include="DionysosFX.Swan">
+      <HintPath>DionysosFX\DionysosFX.Swan.dll</HintPath>
+    </Reference>
+    <Reference Include="HttpMultipartParser">
+      <HintPath>DionysosFX\HttpMultipartParser.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
