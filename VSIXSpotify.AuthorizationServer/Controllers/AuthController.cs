@@ -1,15 +1,19 @@
-﻿using DionysosFX.Module.WebApi;
+﻿using DionysosFX.Module.IWebApi;
+using DionysosFX.Module.WebApi;
+using DionysosFX.Module.WebApi.EnpointResults;
 using DionysosFX.Swan.Routing;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace VSIXSpotify.AuthorizationServer.Controllers
 {
     public class AuthController : WebApiController
     {
-        private string RedirectUri = "";
-        private string ClientId = "";
-        private string ClientSecret = "";
-        private string SpotifyUrl = "";
+        private string RedirectUri = ConfigurationManager.AppSettings["redirectUrl"];
+        private string ClientId = ConfigurationManager.AppSettings["clientId"];
+        private string ClientSecret = ConfigurationManager.AppSettings["cleintSecret"];
+        private string SpotifyUrl = ConfigurationManager.AppSettings["spotifyUrl"];
+
         private List<string> Scopes = new List<string>()
         {
             "ugc-image-upload",
@@ -37,8 +41,16 @@ namespace VSIXSpotify.AuthorizationServer.Controllers
         [Route(HttpVerb.GET, "/redirect")]
         public void Redirect()
         {
-            Context.Response.Redirect("http://www.google.com");
+            var scopes = string.Join(' ', Scopes);
+            string url = string.Format("{0}/authorize?response_type=code&client_id={1}&scope={2}&redirect_uri={3}", SpotifyUrl, ClientId, scopes, RedirectUri);
+            Context.Response.Redirect(url);
             Context.SetHandled();
+        }
+
+        [Route(HttpVerb.GET,"/callback/{error}/{state}/{code}")]
+        public IEndpointResult Callback([QueryData]string error,[QueryData]string state,[QueryData]string code)
+        {
+            return new Ok(new { });
         }
     }
 }

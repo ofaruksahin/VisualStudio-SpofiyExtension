@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using System;
+using System.IO;
 using VSIXSpotify.AddIn.Core.IRepository;
 
 namespace VSIXSpotify.AddIn.Infrastructure.Repository
@@ -14,8 +16,25 @@ namespace VSIXSpotify.AddIn.Infrastructure.Repository
                 .TryResolve<ISpotifyService>(out spotifyService);
         }
 
+        private string GetSpotifyFilePath()
+        {
+            string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            return Path.Combine(userPath, ".vsixspotify");
+        }
+
         public bool IsAuthenticated()
         {
+            var filePath = GetSpotifyFilePath();
+            if (!File.Exists(filePath))
+                return false;
+            try
+            {
+                var fileContent = File.ReadAllText(filePath);
+            }
+            catch (Exception)
+            {
+
+            }
             return false;
         }
 

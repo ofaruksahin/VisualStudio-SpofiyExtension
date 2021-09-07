@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
+using VSIXSpotify.AddIn.Core;
 using VSIXSpotify.AddIn.Core.IRepository;
 using VSIXSpotify.AddIn.Infrastructure;
 
@@ -17,8 +18,9 @@ namespace VSIXSpotify.AddIn.UI
         {
             this.InitializeComponent();
             this.Loaded += SpotifyControl_Loaded;
-            this.Unloaded += SpotifyControl_Unloaded;
+            this.ToolTipOpening += SpotifyControl_ToolTipOpening;
         }
+        
 
         private void SpotifyControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -26,23 +28,19 @@ namespace VSIXSpotify.AddIn.UI
             _dte = DTEHelper.GetObjectDTE();
             ThreadHelper.ThrowIfNotOnUIThread();
             DTEHelper.AddEvents(_dte.Events.SolutionEvents);
-            _dte.Events.SolutionEvents.Opened += SolutionEvents_Opened;
-            if (_dte.Solution.IsOpen)
-                SolutionOpened();
+            _dte.Events.SolutionEvents.Opened += SolutionEvents_Opened;          
             ContainerHelper
                 .Build()
                 .TryResolve<IAuthService>(out authService);
+
+            if (_dte.Solution.IsOpen)
+                SolutionOpened();
         }
 
-        private void SpotifyControl_Unloaded(object sender, RoutedEventArgs e)
+        private void SpotifyControl_ToolTipOpening(object sender, ToolTipEventArgs e)
         {
-            this.Loaded -= SpotifyControl_Loaded;
-            this.Unloaded -= SpotifyControl_Unloaded;
-            authorizationBrowser.Navigated -= AuthorizationBrowser_Navigated;
-            ThreadHelper.ThrowIfNotOnUIThread();
-            _dte.Events.SolutionEvents.Opened -= SolutionEvents_Opened;
-            DTEHelper.Dispose();
-            ContainerHelper.Dispose();
+            if (_dte.Solution.IsOpen)
+                SolutionOpened();
         }
 
         private void SolutionEvents_Opened()
@@ -85,7 +83,8 @@ namespace VSIXSpotify.AddIn.UI
             authorizationTabItem.Visibility = Visibility.Visible;
             authorizationBrowser.Visibility = Visibility.Visible;
             tabControl.SelectedIndex = 0;
-            //authorizationBrowser.Source = new System.Uri("");
+            string redirectUrl = Options.AuthorizationUrl;
+            authorizationBrowser.Source = new System.Uri(redirectUrl+"/redirect");
         }
         #endregion
     }
