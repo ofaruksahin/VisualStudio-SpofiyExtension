@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using VSIXSpotify.AddIn.Infrastructure;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSIXSpotify.AddIn.UI

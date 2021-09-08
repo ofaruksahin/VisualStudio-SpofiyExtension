@@ -2,8 +2,11 @@
 using DionysosFX.Module.WebApi;
 using DionysosFX.Module.WebApi.EnpointResults;
 using DionysosFX.Swan.Routing;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace VSIXSpotify.AuthorizationServer.Controllers
 {
@@ -11,7 +14,7 @@ namespace VSIXSpotify.AuthorizationServer.Controllers
     {
         private string RedirectUri = ConfigurationManager.AppSettings["redirectUrl"];
         private string ClientId = ConfigurationManager.AppSettings["clientId"];
-        private string ClientSecret = ConfigurationManager.AppSettings["cleintSecret"];
+        private string ClientSecret = ConfigurationManager.AppSettings["clientSecret"];
         private string SpotifyUrl = ConfigurationManager.AppSettings["spotifyUrl"];
 
         private List<string> Scopes = new List<string>()
@@ -47,10 +50,84 @@ namespace VSIXSpotify.AuthorizationServer.Controllers
             Context.SetHandled();
         }
 
-        [Route(HttpVerb.GET,"/callback/{error}/{state}/{code}")]
-        public IEndpointResult Callback([QueryData]string error,[QueryData]string state,[QueryData]string code)
+        [Route(HttpVerb.GET, "/callback/{error}/{state}/{code}")]
+        public void Callback([QueryData] string error, [QueryData] string state, [QueryData] string code)
         {
-            return new Ok(new { });
+            
         }
+
+        [Route(HttpVerb.GET,"/token/{code}")]
+        public async Task<IEndpointResult> Token([QueryData] string code)
+        {
+            if (!string.IsNullOrEmpty(code))
+            {
+                try
+                {
+                    string url = string.Format("{0}/api/token", SpotifyUrl);
+                    using (HttpClient client = new HttpClient())
+                    {
+                        var dict = new Dictionary<string, string>();
+                        dict.Add("grant_type", "authorization_code");
+                        dict.Add("code", code);
+                        dict.Add("redirect_uri", RedirectUri);
+                        dict.Add("client_id", ClientId);
+                        dict.Add("client_secret", ClientSecret);
+                        var req = new HttpRequestMessage(HttpMethod.Post, url) { Content = new FormUrlEncodedContent(dict) };
+                        var res = await client.SendAsync(req);
+                        res.EnsureSuccessStatusCode();
+                        var content = await res.Content.ReadAsStringAsync();
+                        var token = JsonConvert.DeserializeObject<TokenItem>(content);
+                        return new Ok(token);
+                    }
+                }
+                catch (System.Exception e)
+                {
+
+                }
+
+            }
+            return new NotFound(new { });
+        }
+
+        [Route(HttpVerb.GET, "/refresh/{refresh_token}")]
+        public async Task<IEndpointResult> Refresh([QueryData] string refresh_token)
+        {
+            if (!string.IsNullOrEmpty(refresh_token))
+            {
+                string url = string.Format("{0}/api/token", SpotifyUrl);
+                using(HttpClient client = new HttpClient())
+                {
+                    try
+                    {
+                        var dict = new Dictionary<string, string>();
+                        dict.Add("grant_type", "refresh_token");
+                        dict.Add("refresh_token", refresh_token);
+                        dict.Add("client_id", ClientId);
+                        dict.Add("client_secret", ClientSecret);
+                        var req = new HttpRequestMessage(HttpMethod.Post, url) { Content = new FormUrlEncodedContent(dict) };
+                        var res = await client.SendAsync(req);
+                        res.EnsureSuccessStatusCode();
+                        var content = await res.Content.ReadAsStringAsync();
+                        var token = JsonConvert.DeserializeObject<TokenItem>(content);
+                        token.refresh_token = refresh_token;
+                        return new Ok(token);
+                    }
+                    catch (System.Exception)
+                    {
+                        
+                    }                
+                }
+            }
+            return new NotFound(new { });
+        }
+    }
+
+    internal class TokenItem
+    {
+        public string access_token { get; set; }
+        public string token_type { get; set; }
+        public int expires_in { get; set; }
+        public string refresh_token { get; set; }
+        public string scope { get; set; }
     }
 }

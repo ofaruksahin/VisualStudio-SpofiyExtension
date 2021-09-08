@@ -19,6 +19,11 @@ namespace VSIXSpotify.AddIn.Infrastructure
                 .As<IAuthService>()
                 .SingleInstance();
 
+            builder
+                .RegisterType(typeof(SpotifyService))
+                .As<ISpotifyService>()
+                .SingleInstance();
+
             _container = builder.Build();
             return _container;
         }        

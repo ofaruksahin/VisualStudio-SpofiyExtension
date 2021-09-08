@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIXSpotify.AddIn", "VSIXSpotify.AddIn\VSIXSpotify.AddIn.csproj", "{512CDB30-064B-4465-9BEF-16EB26BB73C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIXSpotify.AuthorizationServer", "VSIXSpotify.AuthorizationServer\VSIXSpotify.AuthorizationServer.csproj", "{18726284-0967-4AAA-9AB5-11ABBC7E93A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VSIXSpotify.AuthorizationServer", "VSIXSpotify.AuthorizationServer\VSIXSpotify.AuthorizationServer.csproj", "{18726284-0967-4AAA-9AB5-11ABBC7E93A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
