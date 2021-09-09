@@ -27,7 +27,7 @@ namespace VSIXSpotify.AddIn.Infrastructure.Repository
                 var fileContent = File.ReadAllText(filePath);
                 var tokenItem = JsonConvert.DeserializeObject<TokenItem>(fileContent);
                 if (tokenItem != null)
-                    return !string.IsNullOrEmpty(tokenItem.access_token);
+                    return !string.IsNullOrEmpty(tokenItem.AccessToken);
             }
             catch (Exception)
             {
@@ -48,7 +48,7 @@ namespace VSIXSpotify.AddIn.Infrastructure.Repository
                     var content = await res.Content.ReadAsStringAsync();
                     var tokenItem = JsonConvert.DeserializeObject<TokenItem>(content);
                     if (tokenItem != null)
-                        if (!string.IsNullOrEmpty(tokenItem.access_token))
+                        if (!string.IsNullOrEmpty(tokenItem.AccessToken))
                         {
                             var filePath = GetSpotifyFilePath();
                             if (!File.Exists(filePath))
@@ -72,19 +72,19 @@ namespace VSIXSpotify.AddIn.Infrastructure.Repository
                 return false;
             var content = File.ReadAllText(path);
             var tokenItem = JsonConvert.DeserializeObject<TokenItem>(content);
-            if (!string.IsNullOrEmpty(tokenItem.refresh_token))
+            if (!string.IsNullOrEmpty(tokenItem.RefreshToken))
             {
                 try
                 {
                     using (HttpClient client = new HttpClient())
                     {
-                        string url = string.Format("{0}/refresh?refresh_token={1}", Options.AuthorizationUrl, tokenItem.refresh_token);
+                        string url = string.Format("{0}/refresh?refresh_token={1}", Options.AuthorizationUrl, tokenItem.RefreshToken);
                         var res = await client.GetAsync(url);
                         res.EnsureSuccessStatusCode();
                         var resContent = await res.Content.ReadAsStringAsync();
                         tokenItem = JsonConvert.DeserializeObject<TokenItem>(resContent);
                         if (tokenItem != null)
-                            if (!string.IsNullOrEmpty(tokenItem.access_token))
+                            if (!string.IsNullOrEmpty(tokenItem.AccessToken))
                             {
                                 var filePath = GetSpotifyFilePath();
                                 if (!File.Exists(filePath))
@@ -110,7 +110,7 @@ namespace VSIXSpotify.AddIn.Infrastructure.Repository
                 {
                     var content = File.ReadAllText(path);
                     var tokenItem = JsonConvert.DeserializeObject<TokenItem>(content);
-                    return tokenItem.access_token;
+                    return tokenItem.AccessToken;
                 }
             }
             catch (Exception)

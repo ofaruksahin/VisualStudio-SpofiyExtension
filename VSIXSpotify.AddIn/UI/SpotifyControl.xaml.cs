@@ -1,12 +1,13 @@
 ﻿using Autofac;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using System;
+using Microsoft.VisualStudio.Threading;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using VSIXSpotify.AddIn.Core;
 using VSIXSpotify.AddIn.Core.IRepository;
+using VSIXSpotify.AddIn.Core.Spotify;
 using VSIXSpotify.AddIn.Infrastructure;
 
 namespace VSIXSpotify.AddIn.UI
@@ -16,13 +17,25 @@ namespace VSIXSpotify.AddIn.UI
         private DTE _dte = null;
         private IAuthService authService = null;
         private ISpotifyService spotifyService = null;
-
+        private DeviceList devices = null;
 
         public SpotifyControl()
         {
             this.InitializeComponent();
             this.Loaded += SpotifyControl_Loaded;
             this.ToolTipOpening += SpotifyControl_ToolTipOpening;
+            this.ToolTipClosing += SpotifyControl_ToolTipClosing;
+            this.Unloaded += SpotifyControl_Unloaded;
+        }
+
+        private void SpotifyControl_ToolTipClosing(object sender, ToolTipEventArgs e)
+        {
+            authorizationBrowser.LoadCompleted -= AuthorizationBrowser_LoadCompleted;
+        }
+
+        private void SpotifyControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            authorizationBrowser.LoadCompleted -= AuthorizationBrowser_LoadCompleted;
         }
 
         private void SpotifyControl_Loaded(object sender, RoutedEventArgs e)
@@ -30,7 +43,8 @@ namespace VSIXSpotify.AddIn.UI
             _dte = DTEHelper.GetObjectDTE();
             ThreadHelper.ThrowIfNotOnUIThread();
             DTEHelper.AddEvents(_dte.Events.SolutionEvents);
-            _dte.Events.SolutionEvents.Opened += SolutionEvents_Opened;
+            _dte.Events.SolutionEvents.Opened += SolutionEvents_Opened;      
+            
             ContainerHelper
                 .Build()
                 .TryResolve<IAuthService>(out authService);
@@ -57,6 +71,7 @@ namespace VSIXSpotify.AddIn.UI
 
         private void SolutionOpened()
         {
+            authorizationBrowser.LoadCompleted -= AuthorizationBrowser_LoadCompleted;
             authorizationBrowser.LoadCompleted += AuthorizationBrowser_LoadCompleted;
             var isAuthenticated = authService.IsAuthenticated();
             if (isAuthenticated)
@@ -71,7 +86,7 @@ namespace VSIXSpotify.AddIn.UI
             }
         }
 
-        private async void AuthorizationBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private async  void AuthorizationBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             if (e.Uri.AbsolutePath == "/callback")
             {
@@ -81,8 +96,8 @@ namespace VSIXSpotify.AddIn.UI
                 if (indexOf < 0)
                     return;
                 code = queries[indexOf + 1];
-                var isGetToken = await authService.GetToken(code);
-                if (isGetToken)
+                var isTrue =  await authService.GetToken(code);
+                if (isTrue)
                 {
                     var isAuthenticated = authService.IsAuthenticated();
                     if (isAuthenticated)
@@ -120,7 +135,8 @@ namespace VSIXSpotify.AddIn.UI
 
         private async void GetDevices()
         {
-            var devices = await spotifyService.GetDevices();
+            devices = await spotifyService.GetDevices();
+            deviceListView.DataContext = devices.Devices;
         }
         #endregion
     }

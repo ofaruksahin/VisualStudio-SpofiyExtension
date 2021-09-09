@@ -24,5 +24,8 @@ namespace VSIXSpotify.AddIn.Core.Spotify
 
         [JsonProperty("volume_percent")]
         public int VolumePercent { get; set; }
+
+        [JsonIgnore]
+        public string IconPath { get; set; }
     }
 }

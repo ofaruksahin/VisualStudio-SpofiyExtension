@@ -23,7 +23,44 @@
 
             <TabItem 
                 x:Name="deviceTabItem"
-                Header="Devices"></TabItem>
+                Header="Devices">
+                <ListView 
+                    x:Name="deviceListView"
+                    ItemsSource="{Binding}"
+                    Background="Transparent"                   
+                    Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+                    >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Is Active">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <RadioButton GroupName="activeDevice" IsChecked="{Binding IsActive,Mode=TwoWay}"></RadioButton>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Device Type">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Type}"></TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="Background" Value="Transparent" />                           
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </TabItem>
+
+            <TabItem
+                x:Name="controlDeviceTabItem"
+                Header="Control Device"
+                ></TabItem>
         </TabControl>
     </Grid>
 </UserControl>
