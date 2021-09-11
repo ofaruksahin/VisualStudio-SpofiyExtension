@@ -51,11 +51,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Core\Spotify\Action.cs" />
+    <Compile Include="Core\Spotify\Album.cs" />
+    <Compile Include="Core\Spotify\Artist.cs" />
+    <Compile Include="Core\Spotify\CurrentPlaybackState.cs" />
     <Compile Include="Core\Spotify\Device.cs" />
     <Compile Include="Core\IRepository\IAuthService.cs" />
     <Compile Include="Core\IRepository\ISpotifyService.cs" />
     <Compile Include="Core\Options.cs" />
     <Compile Include="Core\Spotify\Devices.cs" />
+    <Compile Include="Core\Spotify\Disallow.cs" />
+    <Compile Include="Core\Spotify\ExternalId.cs" />
+    <Compile Include="Core\Spotify\ExternalUrl.cs" />
+    <Compile Include="Core\Spotify\Image.cs" />
+    <Compile Include="Core\Spotify\LinkedFrom.cs" />
     <Compile Include="Core\TokenItem.cs" />
     <Compile Include="Infrastructure\ContainerHelper.cs" />
     <Compile Include="Infrastructure\DTEHelper.cs" />

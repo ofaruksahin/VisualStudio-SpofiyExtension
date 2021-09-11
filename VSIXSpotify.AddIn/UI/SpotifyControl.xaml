@@ -35,7 +35,7 @@
                             <GridViewColumn Header="Is Active">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <RadioButton GroupName="activeDevice" IsChecked="{Binding IsActive,Mode=TwoWay}"></RadioButton>
+                                        <RadioButton GroupName="activeDevice" IsChecked="{Binding IsActive,Mode=TwoWay}" Checked="RadioButton_Checked"></RadioButton>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -51,7 +51,7 @@
                     </ListView.View>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
-                            <Setter Property="Background" Value="Transparent" />                           
+                            <Setter Property="Background" Value="Transparent" />
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
@@ -60,7 +60,52 @@
             <TabItem
                 x:Name="controlDeviceTabItem"
                 Header="Control Device"
-                ></TabItem>
+                >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="50*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Row="0" Grid.ColumnSpan="3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="10 10 10 10">
+                                <Image x:Name="Thumbnail" Source="{Binding Url}" Grid.Row="0" Grid.Column="0"></Image>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+                                <TextBlock x:Name="SelectedMusicArtist" Margin="10 2 10 2" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"></TextBlock>
+                                <TextBlock x:Name="SelectedMusic"  Margin="10 2 10 2" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                    <Button x:Name="btnPrevious" Grid.Row="1" Grid.Column="0" Height="25" Margin="10 10 10 10" Content="Previous" Click="btnPrevious_Click"></Button>
+                    <Button x:Name="btnPauseOrPlay" Grid.Row="1" Grid.Column="1" Height="25" Margin="10 10 10 10" Content="Pause/Play" Click="btnPauseOrPlay_Click"></Button>
+                    <Button x:Name="btnNext" Grid.Row="1" Grid.Column="2" Height="25" Margin="10 10 10 10" Content="Next" Click="btnNext_Click"></Button>
+                    <Grid Grid.Row="2" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85*"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Slider Maximum="100" Value="55" Grid.Row="0" Grid.Column="0" IsEnabled="false"></Slider>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="55/100" Margin="10 0 10 0" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"></TextBlock>
+                    </Grid>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

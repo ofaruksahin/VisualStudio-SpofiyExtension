@@ -6,5 +6,7 @@ namespace VSIXSpotify.AddIn.Core.IRepository
     public interface ISpotifyService
     {
         Task<DeviceList> GetDevices();
+
+        Task<CurrentPlaybackState> GetCurrentPlaybackState();
     }
 }

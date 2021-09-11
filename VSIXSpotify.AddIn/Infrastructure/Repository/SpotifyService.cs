@@ -17,14 +17,26 @@ namespace VSIXSpotify.AddIn.Infrastructure.Repository
                 .Build()
                 .TryResolve<IAuthService>(out authService);
         }
-                
+       
+
         public async Task<DeviceList> GetDevices()
         {
             var response = await SpotifyClient.Get("/v1/me/player/devices");
-            if(response.StatusCode == HttpStatusCode.OK)
+            if(response != null && response.StatusCode == HttpStatusCode.OK)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<DeviceList>(content);
+            }
+            return null;
+        }
+
+        public async Task<CurrentPlaybackState> GetCurrentPlaybackState()
+        {
+            var response = await SpotifyClient.Get("/v1/me/player?market=ES");
+            if(response != null && response.StatusCode == HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<CurrentPlaybackState>(content);
             }
             return null;
         }
