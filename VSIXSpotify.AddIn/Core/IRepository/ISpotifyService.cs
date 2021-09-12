@@ -8,5 +8,8 @@ namespace VSIXSpotify.AddIn.Core.IRepository
         Task<DeviceList> GetDevices();
 
         Task<CurrentPlaybackState> GetCurrentPlaybackState();
+        Task<bool> NextSong(Device device);
+        Task<bool> PreviousSong(Device device);
+        Task<bool> PlayOrPause(CurrentPlaybackState playbackState, Device selectedDevice);
     }
 }

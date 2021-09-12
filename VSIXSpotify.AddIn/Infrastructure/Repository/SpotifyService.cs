@@ -8,16 +8,7 @@ using VSIXSpotify.AddIn.Core.Spotify;
 namespace VSIXSpotify.AddIn.Infrastructure.Repository
 {
     public class SpotifyService : ISpotifyService
-    {
-        IAuthService authService;
-
-        public SpotifyService()
-        {
-            ContainerHelper
-                .Build()
-                .TryResolve<IAuthService>(out authService);
-        }
-       
+    {     
 
         public async Task<DeviceList> GetDevices()
         {
@@ -39,6 +30,34 @@ namespace VSIXSpotify.AddIn.Infrastructure.Repository
                 return JsonConvert.DeserializeObject<CurrentPlaybackState>(content);
             }
             return null;
+        }
+
+        public async Task<bool> NextSong(Device device)
+        {
+            var response = await SpotifyClient.Post($"/v1/me/player/next?device_id={device.Id}");
+            return response != null && response.StatusCode == HttpStatusCode.NoContent;            
+        }
+
+        public async Task<bool> PreviousSong(Device device)
+        {
+            var response = await SpotifyClient.Post($"/v1/me/player/previous?device_id={device.Id}");
+            return response != null && response.StatusCode == HttpStatusCode.NoContent;
+        }
+
+        public async Task<bool> PlayOrPause(CurrentPlaybackState playbackState, Device selectedDevice)
+        {
+            var result = false;
+            if (playbackState.IsPlaying)
+            {
+                var response = await SpotifyClient.Put($"/v1/me/player/pause?device_id={selectedDevice.Id}");
+                result = response != null && response.StatusCode == HttpStatusCode.NoContent;
+            }
+            else
+            {
+                var response = await SpotifyClient.Put($"/v1/me/player/play?device_id={selectedDevice.Id}", new { });
+                result = response != null && response.StatusCode == HttpStatusCode.NoContent;
+            }
+            return result;
         }
     }
 }

@@ -1,14 +1,11 @@
 ﻿using Autofac;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Threading;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using VSIXSpotify.AddIn.Core;
 using VSIXSpotify.AddIn.Core.IRepository;
 using VSIXSpotify.AddIn.Core.Spotify;
@@ -78,7 +75,7 @@ namespace VSIXSpotify.AddIn.UI
         }
 
         private void SpotifyControl_ToolTipOpening(object sender, ToolTipEventArgs e)
-        {            
+        {
             if (_dte.Solution.IsOpen)
                 SolutionOpened();
             timerRefreshToken = new Timer(TimerRefreshTokenDoWork, null, 0, (int)TimeSpan.FromMinutes(timerRefreshTokenDelay).TotalMilliseconds);
@@ -204,19 +201,31 @@ namespace VSIXSpotify.AddIn.UI
             }
         }
 
-        private void btnPrevious_Click(object sender, RoutedEventArgs e)
+        private async void btnPrevious_Click(object sender, RoutedEventArgs e)
         {
-
+            if (selectedDevice != null)
+            {
+                await spotifyService.PreviousSong(selectedDevice);
+                SetCurrentPlaybackState();
+            }
         }
 
-        private void btnPauseOrPlay_Click(object sender, RoutedEventArgs e)
+        private async void btnPauseOrPlay_Click(object sender, RoutedEventArgs e)
         {
-
+            if(currentPlaybackState!=null && selectedDevice != null)
+            {
+                await spotifyService.PlayOrPause(currentPlaybackState, selectedDevice);
+                SetCurrentPlaybackState();
+            }
         }
 
-        private void btnNext_Click(object sender, RoutedEventArgs e)
+        private async void btnNext_Click(object sender, RoutedEventArgs e)
         {
-
+            if (selectedDevice != null)
+            {
+                await spotifyService.NextSong(selectedDevice);
+                SetCurrentPlaybackState();
+            }
         }
         #endregion
 
@@ -228,14 +237,14 @@ namespace VSIXSpotify.AddIn.UI
 
             if (authService != null)
             {
-                if(authService.IsAuthenticated())
+                if (authService.IsAuthenticated())
                 {
                     var isOk = authService.RefreshToken().Result;
                     if (!isOk)
                     {
                         ShowMessage("Session is expired. Please try open tool");
                     }
-                }               
+                }
             }
 
             Monitor.Exit(timerRefreshTokenLock);
@@ -246,7 +255,7 @@ namespace VSIXSpotify.AddIn.UI
             if (!Monitor.TryEnter(timerPlaybackStateLock))
                 return;
 
-            if(authService != null)
+            if (authService != null)
             {
                 if (authService.IsAuthenticated())
                 {
@@ -256,7 +265,7 @@ namespace VSIXSpotify.AddIn.UI
                     }
                 }
             }
-           
+
 
             Monitor.Exit(timerPlaybackStateLock);
         }

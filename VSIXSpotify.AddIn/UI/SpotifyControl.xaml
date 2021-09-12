@@ -64,8 +64,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="50*"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="50*"></RowDefinition>                        
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -92,18 +91,7 @@
                     </StackPanel>
                     <Button x:Name="btnPrevious" Grid.Row="1" Grid.Column="0" Height="25" Margin="10 10 10 10" Content="Previous" Click="btnPrevious_Click"></Button>
                     <Button x:Name="btnPauseOrPlay" Grid.Row="1" Grid.Column="1" Height="25" Margin="10 10 10 10" Content="Pause/Play" Click="btnPauseOrPlay_Click"></Button>
-                    <Button x:Name="btnNext" Grid.Row="1" Grid.Column="2" Height="25" Margin="10 10 10 10" Content="Next" Click="btnNext_Click"></Button>
-                    <Grid Grid.Row="2" Grid.ColumnSpan="3">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="85*"></ColumnDefinition>
-                            <ColumnDefinition Width="auto"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Slider Maximum="100" Value="55" Grid.Row="0" Grid.Column="0" IsEnabled="false"></Slider>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="55/100" Margin="10 0 10 0" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"></TextBlock>
-                    </Grid>
+                    <Button x:Name="btnNext" Grid.Row="1" Grid.Column="2" Height="25" Margin="10 10 10 10" Content="Next" Click="btnNext_Click"></Button>                
                 </Grid>
             </TabItem>
         </TabControl>

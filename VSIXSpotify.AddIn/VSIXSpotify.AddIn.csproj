@@ -65,6 +65,8 @@
     <Compile Include="Core\Spotify\ExternalUrl.cs" />
     <Compile Include="Core\Spotify\Image.cs" />
     <Compile Include="Core\Spotify\LinkedFrom.cs" />
+    <Compile Include="Core\Spotify\Offset.cs" />
+    <Compile Include="Core\Spotify\Play.cs" />
     <Compile Include="Core\TokenItem.cs" />
     <Compile Include="Infrastructure\ContainerHelper.cs" />
     <Compile Include="Infrastructure\DTEHelper.cs" />
